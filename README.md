@@ -59,6 +59,19 @@ bun run typecheck
 bun run lint        # Biome(lint・フォーマット・import 整列)。自動修正は bun run lint:fix
 ```
 
+## デモ版(GitHub Pages)
+
+`packages/demo` は、サーバをブラウザ内(SharedWorker)で動かす静的なデモ版です。同梱のサンプルシナリオで、ファシリテータと参加者を別々のタブで開いて演習を試せます。演習の状態はタブ間で共有され、すべてのタブを閉じると消えます。
+
+```sh
+bun run dev:demo     # Vite で起動
+bun run build:demo   # 静的ビルド (packages/demo/dist)
+```
+
+master への push で GitHub Pages に公開します(`.github/workflows/pages.yml`)。ファシリテータは URL に `?isadmin` を付けて開くと選びやすくなります。
+
+デモ版の制約: ハッシュ形式のパスワード(`{SHA256}...` など)と UTF-32 のシナリオファイルには対応していません。
+
 ## Storybook
 
 ```sh
