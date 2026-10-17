@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
 import type { MemberWithPresence, NotificationMessage, ScenarioSetting, WorkflowSummary } from "@imane/shared";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { api, saveBlob } from "../api";
 import { Empty } from "../components/ui";
 import { errorText, useApp } from "../context";
@@ -20,7 +20,14 @@ async function renderMermaid(text: string): Promise<string> {
   mermaid.initialize({
     startOnLoad: false,
     securityLevel: "strict",
-    sequence: { mirrorActors: false, diagramMarginX: 20, diagramMarginY: 5, boxTextMargin: 5, noteMargin: 5, messageMargin: 5 },
+    sequence: {
+      mirrorActors: false,
+      diagramMarginX: 20,
+      diagramMarginY: 5,
+      boxTextMargin: 5,
+      noteMargin: 5,
+      messageMargin: 5,
+    },
   });
   const { svg } = await mermaid.render(`sequence-${++renderSeq}`, text);
   return svg;
@@ -87,14 +94,17 @@ export function ReviewView() {
     if (!editing) setSource(generated);
   }, [generated, editing]);
 
-  const draw = useCallback(async (text: string) => {
-    if (!text) return;
-    try {
-      setSvg(await renderMermaid(text));
-    } catch (e) {
-      notify(`シーケンス図の描画に失敗しました。${errorText(e)}`, "error");
-    }
-  }, [notify]);
+  const draw = useCallback(
+    async (text: string) => {
+      if (!text) return;
+      try {
+        setSvg(await renderMermaid(text));
+      } catch (e) {
+        notify(`シーケンス図の描画に失敗しました。${errorText(e)}`, "error");
+      }
+    },
+    [notify],
+  );
 
   useEffect(() => {
     if (!editing) void draw(generated);
@@ -127,10 +137,12 @@ export function ReviewView() {
         </button>
         <span className="separator" />
         <label title="フェーズ中にアクションのなかったユーザを非表示にします。">
-          <input type="checkbox" checked={hideInactive} onChange={(e) => setHideInactive(e.target.checked)} /> 非アクティブなユーザを隠す
+          <input type="checkbox" checked={hideInactive} onChange={(e) => setHideInactive(e.target.checked)} />{" "}
+          非アクティブなユーザを隠す
         </label>
         <label title="「話し合い」アクションを非表示にします。">
-          <input type="checkbox" checked={hideTalk} onChange={(e) => setHideTalk(e.target.checked)} /> 「話し合い」を隠す
+          <input type="checkbox" checked={hideTalk} onChange={(e) => setHideTalk(e.target.checked)} />{" "}
+          「話し合い」を隠す
         </label>
         <label title="イベントを短縮して表示します。">
           <input type="checkbox" checked={compact} onChange={(e) => setCompact(e.target.checked)} /> 短縮して表示
@@ -139,7 +151,12 @@ export function ReviewView() {
         <button type="button" className="icon-button" title="拡大" onClick={() => setZoom((z) => Math.min(4, z + 0.1))}>
           <span className="fa fa-search-plus" />
         </button>
-        <button type="button" className="icon-button" title="縮小" onClick={() => setZoom((z) => Math.max(0.2, z - 0.1))}>
+        <button
+          type="button"
+          className="icon-button"
+          title="縮小"
+          onClick={() => setZoom((z) => Math.max(0.2, z - 0.1))}
+        >
           <span className="fa fa-search-minus" />
         </button>
         <button type="button" onClick={() => setZoom(1)} title="元のサイズに戻します。">
@@ -162,7 +179,8 @@ export function ReviewView() {
         <div className="role-filter">
           {data.members.map((m) => (
             <label key={m.role}>
-              <input type="checkbox" checked={!hiddenRoles.has(m.role)} onChange={() => toggleRole(m.role)} /> {m.rolename}
+              <input type="checkbox" checked={!hiddenRoles.has(m.role)} onChange={() => toggleRole(m.role)} />{" "}
+              {m.rolename}
             </label>
           ))}
         </div>
@@ -170,7 +188,12 @@ export function ReviewView() {
 
       {editing && (
         <div className="editor">
-          <textarea value={source} onChange={(e) => setSource(e.target.value)} rows={12} aria-label="シーケンス図の定義" />
+          <textarea
+            value={source}
+            onChange={(e) => setSource(e.target.value)}
+            rows={12}
+            aria-label="シーケンス図の定義"
+          />
           <button type="button" onClick={() => void draw(source)}>
             <span className="fa fa-refresh" /> 更新
           </button>
@@ -180,10 +203,12 @@ export function ReviewView() {
       {data ? (
         <>
           <div className="diagram-header">
-            {data.team} フェーズ:{data.workflow.phase || "未開始"} ({formatDate(Date.now())}) スコア:{data.workflow.score}
+            {data.team} フェーズ:{data.workflow.phase || "未開始"} ({formatDate(Date.now())}) スコア:
+            {data.workflow.score}
           </div>
           <div className="diagram-scroll">
             {/* mermaid は securityLevel: strict で描画しているため、生成した SVG をそのまま埋め込む */}
+            {/* biome-ignore lint/security/noDangerouslySetInnerHtml: 上記のとおり mermaid が生成した SVG */}
             <div className="diagram" style={{ width: `${zoom * 100}%` }} dangerouslySetInnerHTML={{ __html: svg }} />
           </div>
         </>

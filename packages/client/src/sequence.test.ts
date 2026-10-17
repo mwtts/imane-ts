@@ -31,8 +31,17 @@ describe("シーケンス図", () => {
   test("参加者に別名を付け、矢印・Cc・全員宛てを描く", () => {
     const text = buildSequence(
       [
-        ev({ message: "状況;確認", cc: [staff], action: { id: "a", type: "action", name: "連絡", attachments: ["1"] } }),
-        ev({ from: MEMBER_SYSTEM, to: MEMBER_TEAM, message: "開始", action: { id: "s0000", type: "notification", name: "通知" } }),
+        ev({
+          message: "状況;確認",
+          cc: [staff],
+          action: { id: "a", type: "action", name: "連絡", attachments: ["1"] },
+        }),
+        ev({
+          from: MEMBER_SYSTEM,
+          to: MEMBER_TEAM,
+          message: "開始",
+          action: { id: "s0000", type: "notification", name: "通知" },
+        }),
       ],
       [leader, csirt, staff],
       opts,

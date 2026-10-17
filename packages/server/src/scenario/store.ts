@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { basename, join } from "node:path";
-import { unzipSync, zipSync } from "fflate";
 import type { ScenarioInfo, ScenarioSetting, ValidationResult } from "@imane/shared";
+import { unzipSync, zipSync } from "fflate";
 import { badRequest, HttpError, notFound } from "../errors";
 import { createLogger } from "../logger";
 import {
@@ -228,7 +228,9 @@ export class ScenarioStore {
       const validation = this.validateDir(staging);
       const failed = validation.filter((v) => !v.valid);
       if (failed.length > 0) {
-        throw badRequest(`シナリオデータにエラーがあるため保存しませんでした。${failed.map((v) => `${v.label}: ${v.error}`).join(" / ")}`);
+        throw badRequest(
+          `シナリオデータにエラーがあるため保存しませんでした。${failed.map((v) => `${v.label}: ${v.error}`).join(" / ")}`,
+        );
       }
     } finally {
       rmSync(staging, { recursive: true, force: true });

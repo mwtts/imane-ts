@@ -14,15 +14,16 @@ export const OPERATORS = ["AND", "NAND", "OR", "NOR", "NOT"] as const;
 export type Operator = (typeof OPERATORS)[number];
 
 export class ConditionSyntaxError extends Error {
-  constructor(message: string, readonly source: string) {
+  constructor(
+    message: string,
+    readonly source: string,
+  ) {
     super(`${message}: ${source}`);
     this.name = "ConditionSyntaxError";
   }
 }
 
-export type ConditionExpr =
-  | { kind: "state"; id: string }
-  | { kind: "op"; op: Operator; args: ConditionExpr[] };
+export type ConditionExpr = { kind: "state"; id: string } | { kind: "op"; op: Operator; args: ConditionExpr[] };
 
 function isOperator(token: string): token is Operator {
   return (OPERATORS as readonly string[]).includes(token);
@@ -32,8 +33,7 @@ function tokenize(src: string): string[] {
   const tokens: string[] = [];
   const re = /\s*([(),]|[^(),\s]+)/y;
   let consumed = 0;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(src)) !== null) {
+  for (let m = re.exec(src); m !== null; m = re.exec(src)) {
     if (m[1] !== undefined) tokens.push(m[1]);
     consumed = re.lastIndex;
   }

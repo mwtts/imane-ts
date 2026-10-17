@@ -1,24 +1,24 @@
 import { relative } from "node:path";
 import { serveStatic, upgradeWebSocket } from "@hono/bun";
-import { Hono, type Context, type MiddlewareHandler } from "hono";
-import { bodyLimit } from "hono/body-limit";
 import {
-  ConditionSyntaxError,
-  evaluateCondition,
-  isSystemUser,
-  MEMBER_TEAM,
-  ROLE_TEAM,
-  specialMember,
   type ActionRequest,
   type AvailableCard,
   type CardData,
+  ConditionSyntaxError,
+  evaluateCondition,
   type HelpInfo,
+  isSystemUser,
   type LoginOptions,
+  MEMBER_TEAM,
   type ProductInfo,
   type PublicMember,
+  ROLE_TEAM,
   type SessionData,
+  specialMember,
 } from "@imane/shared";
-import { SessionStore, verifyPassword } from "./auth";
+import { type Context, Hono, type MiddlewareHandler } from "hono";
+import { bodyLimit } from "hono/body-limit";
+import { type SessionStore, verifyPassword } from "./auth";
 import type { WorkflowManager } from "./engine/manager";
 import type { WorkflowInstance, WorkflowSnapshot } from "./engine/workflow";
 import { badRequest, forbidden, HttpError, notFound, unauthorized } from "./errors";
@@ -85,7 +85,8 @@ function parseActionRequest(raw: unknown): ActionRequest {
     throw badRequest("パラメタが不正です。(actionId, to)");
   }
   if (r.cc !== undefined && !isStringArray(r.cc)) throw badRequest("パラメタが不正です。(cc)");
-  if (r.attachments !== undefined && !isStringArray(r.attachments)) throw badRequest("パラメタが不正です。(attachments)");
+  if (r.attachments !== undefined && !isStringArray(r.attachments))
+    throw badRequest("パラメタが不正です。(attachments)");
   if (r.replyTo !== undefined && typeof r.replyTo !== "string") throw badRequest("パラメタが不正です。(replyTo)");
   if (r.message !== undefined && (typeof r.message !== "string" || r.message.length > MAX_MESSAGE)) {
     throw badRequest("パラメタが不正です。(message)");
@@ -180,9 +181,7 @@ export function createApp(ctx: AppContext) {
       throw unauthorized("ログオンに失敗しました。IDまたはパスワードが一致しません。");
     }
     if (member.isadmin && !member.passwd && !ctx.allowPasswordlessAdmin) {
-      throw unauthorized(
-        "ファシリテータにはパスワードの設定が必要です。contacts.json の passwd を設定してください。",
-      );
+      throw unauthorized("ファシリテータにはパスワードの設定が必要です。contacts.json の passwd を設定してください。");
     }
     const key = sessions.create(member.email);
     log.info(`ログイン: ${member.email}`);
@@ -232,7 +231,10 @@ export function createApp(ctx: AppContext) {
     const owned = new Set(inst.ownedStates(member.email));
     const cards: AvailableCard[] = scenario.actions
       .filter((a) => cardHeldBy(a, member.role))
-      .map((a) => ({ ...a, available: member.isadmin || cardAvailable(a, inst.phase, new Set([...owned, ...(a.attachments ?? [])])) }));
+      .map((a) => ({
+        ...a,
+        available: member.isadmin || cardAvailable(a, inst.phase, new Set([...owned, ...(a.attachments ?? [])])),
+      }));
     return c.json(cards);
   });
 
@@ -282,7 +284,12 @@ export function createApp(ctx: AppContext) {
           ? ["すべてのユーザ"]
           : members.filter((m) => a.roles?.includes(m.role)).map((m) => m.rolename),
       }));
-    const roles = members.map((m) => ({ role: m.role, rolename: m.rolename, desc: m.desc ?? "", system: isSystemUser(m, 1) }));
+    const roles = members.map((m) => ({
+      role: m.role,
+      rolename: m.rolename,
+      desc: m.desc ?? "",
+      system: isSystemUser(m, 1),
+    }));
     return c.json({ actions, roles } satisfies HelpInfo);
   });
 
@@ -299,7 +306,9 @@ export function createApp(ctx: AppContext) {
     const { member } = c.get("user");
     const members = notifier.presence(inst.team);
     // 他のメンバの所有ステートは管理者にだけ見せる
-    return c.json(member.isadmin ? members : members.map((m) => (m.email === member.email ? m : { ...m, availableStates: [] })));
+    return c.json(
+      member.isadmin ? members : members.map((m) => (m.email === member.email ? m : { ...m, availableStates: [] })),
+    );
   });
 
   // ---------------------------------------------------------------- facilitator

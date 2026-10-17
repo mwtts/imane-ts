@@ -23,6 +23,7 @@
 
 - [ ] `bun run typecheck` が通る
 - [ ] `bun run test` が通る
+- [ ] `bun run lint` が通る(自動修正は `bun run lint:fix`)
 - [ ] 画面での動作確認（UI を変更した場合）
 
 <!-- 確認手順やスクリーンショットがあれば記載してください -->

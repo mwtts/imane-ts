@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { AvailableCard, MemberWithPresence, NotificationMessage, StateData, WorkflowSummary } from "@imane/shared";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../api";
 import { ActionDialog, type ActionMode } from "../components/ActionDialog";
 import { EventDialog } from "../components/EventDialog";
@@ -66,7 +66,9 @@ export function ParticipantView() {
   const debounce = useRef<ReturnType<typeof setTimeout>>(undefined);
   usePush((p) => {
     if (p.type === "presence") {
-      setMembers((prev) => p.members.map((m) => ({ ...m, availableStates: prev.find((x) => x.email === m.email)?.availableStates ?? [] })));
+      setMembers((prev) =>
+        p.members.map((m) => ({ ...m, availableStates: prev.find((x) => x.email === m.email)?.availableStates ?? [] })),
+      );
       return;
     }
     if (p.type !== "event" || p.event.team !== team) return;
@@ -93,7 +95,8 @@ export function ParticipantView() {
   const byId = useMemo(() => new Map(events.map((e) => [e.id, e])), [events]);
   const sentCount = useMemo(() => {
     const c: Record<string, number> = {};
-    for (const e of events) if (e.from.email === session?.userid && !e.reply) c[e.action.id] = (c[e.action.id] ?? 0) + 1;
+    for (const e of events)
+      if (e.from.email === session?.userid && !e.reply) c[e.action.id] = (c[e.action.id] ?? 0) + 1;
     return c;
   }, [events, session]);
   const openEvent = openId ? byId.get(openId) : undefined;
@@ -111,7 +114,12 @@ export function ParticipantView() {
   return (
     <section className="view">
       <div className="toolbar">
-        <button type="button" disabled={!running} title={liveTitle ?? "新規アクションを実行します。"} onClick={() => openAction("new")}>
+        <button
+          type="button"
+          disabled={!running}
+          title={liveTitle ?? "新規アクションを実行します。"}
+          onClick={() => openAction("new")}
+        >
           <span className="fa fa-mail-forward" /> 新規アクション
         </button>
         <button
@@ -127,10 +135,22 @@ export function ParticipantView() {
         </button>
         <span className="spacer" />
         <span className="muted">ヘルプ:</span>
-        <a className="button" href="/image/configurations.jpg" target="_blank" rel="noreferrer" title="シナリオの前提となるシステム構成の説明図">
+        <a
+          className="button"
+          href="/image/configurations.jpg"
+          target="_blank"
+          rel="noreferrer"
+          title="シナリオの前提となるシステム構成の説明図"
+        >
           システム構成
         </a>
-        <a className="button" href="/image/organization.jpg" target="_blank" rel="noreferrer" title="組織構成と連絡ルートの説明図">
+        <a
+          className="button"
+          href="/image/organization.jpg"
+          target="_blank"
+          rel="noreferrer"
+          title="組織構成と連絡ルートの説明図"
+        >
           組織と連絡ルート
         </a>
         <button type="button" onClick={() => setHelp(true)} title="シナリオで定義された役割とアクション">
@@ -146,7 +166,11 @@ export function ParticipantView() {
         {members
           .filter((m) => !m.hidden)
           .map((m) => (
-            <span key={m.email} className={`presence-chip ${m.online ? "online" : "offline"}`} title={`${m.name} (${m.email}) ${m.desc ?? ""}`}>
+            <span
+              key={m.email}
+              className={`presence-chip ${m.online ? "online" : "offline"}`}
+              title={`${m.name} (${m.email}) ${m.desc ?? ""}`}
+            >
               <span className={`fa ${m.online ? "fa-circle" : "fa-circle-o"}`} />
               {m.rolename}
               {m.email === session?.userid && <span className="fa fa-user" title="ログイン中のユーザです。" />}

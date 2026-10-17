@@ -1,0 +1,13 @@
+name: Setup
+description: Bun をセットアップして依存をインストールする
+
+runs:
+  using: composite
+  steps:
+    - uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: 1.4.3
+
+    - name: Install
+      shell: bash
+      run: bun install --frozen-lockfile
