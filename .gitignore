@@ -1,4 +1,21 @@
+# 依存・ビルド成果物
 node_modules/
 dist/
+coverage/
+*.tsbuildinfo
+
+# ログ
 *.log
+
+# 環境変数（秘密情報を含みうる）
+.env
+.env.*
+!.env.example
+
+# サーバーが実行時に書き込むシナリオデータ（アップロードされたシナリオ・作業用ディレクトリ）
+packages/server/data/scenarios/*/
+
+# エディタ・OS
+.vscode/
+.idea/
 .DS_Store
