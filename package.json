@@ -10,7 +10,9 @@
     "start": "cd packages/server && bun run start",
     "test": "cd packages/server && bun test && cd ../client && bun test src",
     "hash-password": "cd packages/server && bun src/hash-password.ts",
-    "typecheck": "tsc -p packages/shared && tsc -p packages/server && tsc -p packages/client"
+    "typecheck": "tsc -p packages/shared && tsc -p packages/server && tsc -p packages/client",
+    "storybook": "cd packages/client && bun run storybook",
+    "build-storybook": "cd packages/client && bun run build-storybook"
   },
   "devDependencies": {
     "typescript": "^7.0.2"
