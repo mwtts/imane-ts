@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css" />
+    <title>IMANE デモ</title>
+    <style>
+      .demo-badge {
+        position: fixed;
+        left: 8px;
+        bottom: 8px;
+        z-index: 1000;
+        padding: 2px 8px;
+        border-radius: 4px;
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        font-size: 12px;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <div class="demo-badge">
+      デモ版: サーバはブラウザ内で動いています。演習の状態はタブ間で共有され、すべてのタブを閉じると消えます。
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

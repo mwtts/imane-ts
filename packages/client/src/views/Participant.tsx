@@ -137,7 +137,7 @@ export function ParticipantView() {
         <span className="muted">ヘルプ:</span>
         <a
           className="button"
-          href="/image/configurations.jpg"
+          href={`${import.meta.env.BASE_URL}image/configurations.jpg`}
           target="_blank"
           rel="noreferrer"
           title="シナリオの前提となるシステム構成の説明図"
@@ -146,7 +146,7 @@ export function ParticipantView() {
         </a>
         <a
           className="button"
-          href="/image/organization.jpg"
+          href={`${import.meta.env.BASE_URL}image/organization.jpg`}
           target="_blank"
           rel="noreferrer"
           title="組織構成と連絡ルートの説明図"
