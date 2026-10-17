@@ -65,8 +65,6 @@ bun run storybook         # http://localhost:6006/ で起動
 bun run build-storybook   # 静的ビルド (packages/client/storybook-static)
 ```
 
-`master` に push すると GitHub Actions が GitHub Pages にデプロイします（https://mwtts.github.io/imane-ts/）。
-
 ## Java 版からの主な変更点
 
 - ログインセションがユーザごとに独立した(旧版はサーバ全体で1つで、複数人が同時に使うと最後にログインしたユーザとして動作していた)
