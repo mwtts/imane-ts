@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { MEMBER_SYSTEM, MEMBER_TEAM, type CardData } from "@imane/shared";
+import { type CardData, MEMBER_SYSTEM, MEMBER_TEAM } from "@imane/shared";
 import { WorkflowInstance } from "../src/engine/workflow";
 import { find, harness, pub, TEAM } from "./fixtures";
 
@@ -124,7 +124,9 @@ describe("アクションの受付と応答", () => {
 
   test("自動応答ユーザからのリプライには Cc を付けない", () => {
     const h = harness({ actions: [ASK], replies: [{ actionid: "ASK", to: "csirt", name: "了解" }] });
-    h.inst.requestAction(ASK, pub(find(h.scenario, "leader")), pub(find(h.scenario, "csirt")), [pub(find(h.scenario, "staff"))]);
+    h.inst.requestAction(ASK, pub(find(h.scenario, "leader")), pub(find(h.scenario, "csirt")), [
+      pub(find(h.scenario, "staff")),
+    ]);
     expect(h.published[0]!.cc).toHaveLength(1);
     h.inst.tick();
     expect(h.published[1]!.cc).toBeUndefined();
@@ -132,9 +134,9 @@ describe("アクションの受付と応答", () => {
 
   test("演習が開始されていなければアクションを拒否する", () => {
     const h = harness({ actions: [ASK] }, false);
-    expect(() => h.inst.requestAction(ASK, pub(find(h.scenario, "leader")), pub(find(h.scenario, "csirt")), [])).toThrow(
-      "演習が実行されていません",
-    );
+    expect(() =>
+      h.inst.requestAction(ASK, pub(find(h.scenario, "leader")), pub(find(h.scenario, "csirt")), []),
+    ).toThrow("演習が実行されていません");
   });
 });
 
@@ -198,7 +200,17 @@ describe("自動アクション", () => {
 describe("トリガーイベント", () => {
   test("フェーズ開始から elapsed 秒を過ぎると一度だけ発火し、from 省略時はシステムから送られる", () => {
     const h = harness({
-      replies: [{ actionid: "s0000", name: "演習開始", message: "開始します", elapsed: 3, state: "ST0", addstate: ["S0"], to: "all" }],
+      replies: [
+        {
+          actionid: "s0000",
+          name: "演習開始",
+          message: "開始します",
+          elapsed: 3,
+          state: "ST0",
+          addstate: ["S0"],
+          to: "all",
+        },
+      ],
       states: [{ id: "S0" }],
     });
     h.clock.advance(3);
@@ -274,7 +286,11 @@ describe("スナップショット", () => {
     const snap = JSON.parse(JSON.stringify(h.inst.snapshot()));
 
     h.clock.advance(1000);
-    const restored = WorkflowInstance.restore(snap, 2, { scenario: () => h.scenario, clock: h.clock, publish: () => {} });
+    const restored = WorkflowInstance.restore(snap, 2, {
+      scenario: () => h.scenario,
+      clock: h.clock,
+      publish: () => {},
+    });
     expect(restored.state).toBe("Suspended");
     expect(restored.team).toBe(TEAM);
     expect(h.clock.now() - restored.start!).toBe(100_000);
@@ -296,7 +312,11 @@ describe("スナップショット", () => {
   test("形式が違うデータは拒否する", () => {
     const h = harness();
     expect(() =>
-      WorkflowInstance.restore({ team: TEAM } as never, 1, { scenario: () => h.scenario, clock: h.clock, publish: () => {} }),
+      WorkflowInstance.restore({ team: TEAM } as never, 1, {
+        scenario: () => h.scenario,
+        clock: h.clock,
+        publish: () => {},
+      }),
     ).toThrow("形式が不正");
   });
 });

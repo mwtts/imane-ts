@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
 import { OPERATORS, type StateData } from "@imane/shared";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { useApp } from "../context";
 
 // ------------------------------------------------------------------ Modal
@@ -48,7 +48,15 @@ const KIND_ICON: Record<ChipKind, { icon: string; title: string }> = {
   condition: { icon: "fa-question", title: "システムステートの条件です。" },
 };
 
-export function StateChip({ id, kind = "state", onPlay }: { id: string; kind?: ChipKind; onPlay?: (s: StateData) => void }) {
+export function StateChip({
+  id,
+  kind = "state",
+  onPlay,
+}: {
+  id: string;
+  kind?: ChipKind;
+  onPlay?: (s: StateData) => void;
+}) {
   const { stateById } = useApp();
   const s = stateById(id);
   const label = s?.name || id;
@@ -119,9 +127,18 @@ export function EffectDialog({ state, onClose }: { state: StateData; onClose: ()
   const effect = state.effect ?? "";
   let frame: ReactNode = <p>この演出効果には対応していません。</p>;
   if (effect.startsWith("href:")) {
-    frame = <iframe className="effect-frame" sandbox="" src={effect.slice("href:".length)} title={state.name ?? state.id} />;
+    frame = (
+      <iframe className="effect-frame" sandbox="" src={effect.slice("href:".length)} title={state.name ?? state.id} />
+    );
   } else if (effect.startsWith("html:")) {
-    frame = <iframe className="effect-frame" sandbox="" srcDoc={effect.slice("html:".length)} title={state.name ?? state.id} />;
+    frame = (
+      <iframe
+        className="effect-frame"
+        sandbox=""
+        srcDoc={effect.slice("html:".length)}
+        title={state.name ?? state.id}
+      />
+    );
   }
   return (
     <Modal title={`イベント発生: ${state.name ?? state.id}`} onClose={onClose}>
@@ -132,7 +149,10 @@ export function EffectDialog({ state, onClose }: { state: StateData; onClose: ()
 
 // ------------------------------------------------------------------ tabs
 
-export function Tabs(props: { tabs: Array<{ id: string; label: string; content: () => ReactNode }>; onChange?: (id: string) => void }) {
+export function Tabs(props: {
+  tabs: Array<{ id: string; label: string; content: () => ReactNode }>;
+  onChange?: (id: string) => void;
+}) {
   const [active, setActive] = useState(props.tabs[0]?.id ?? "");
   const current = props.tabs.find((t) => t.id === active) ?? props.tabs[0];
   return (

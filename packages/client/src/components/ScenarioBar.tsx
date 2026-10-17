@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
 import type { ScenarioInfo, ValidationResult } from "@imane/shared";
+import { useEffect, useRef, useState } from "react";
 import { api } from "../api";
 import { errorText, useApp } from "../context";
 import { formatSeconds, scenarioLabel } from "../format";
@@ -37,7 +37,10 @@ function ScenarioDetail({ info, onClose }: { info: ScenarioInfo; onClose: () => 
       onClose={onClose}
       footer={
         <>
-          <button type="button" onClick={() => api.validateScenario(info.name).then(setResults, (e) => notify(errorText(e), "error"))}>
+          <button
+            type="button"
+            onClick={() => api.validateScenario(info.name).then(setResults, (e) => notify(errorText(e), "error"))}
+          >
             検証
           </button>
           <button type="button" onClick={onClose}>
@@ -90,6 +93,7 @@ export function ScenarioBar({ onActivated }: { onActivated: () => void }) {
       notify(errorText(e), "error");
     }
   };
+  // biome-ignore lint/correctness/useExhaustiveDependencies: マウント時に一度だけ読み込む
   useEffect(() => {
     void reload();
   }, []);
@@ -99,7 +103,11 @@ export function ScenarioBar({ onActivated }: { onActivated: () => void }) {
 
   const activate = async () => {
     if (!current) return;
-    if (current.name !== active?.name && !confirm("シナリオセットを変更すると、進行中のフェーズが破棄されます。\n続行しますか?")) return;
+    if (
+      current.name !== active?.name &&
+      !confirm("シナリオセットを変更すると、進行中のフェーズが破棄されます。\n続行しますか?")
+    )
+      return;
     try {
       await api.activateScenario(current.name);
       notify("シナリオセットを変更しました。");
@@ -116,7 +124,10 @@ export function ScenarioBar({ onActivated }: { onActivated: () => void }) {
         if (!confirm(`シナリオセット「${name}」をアップロードします。同名のシナリオセットは置き換えられます。`)) return;
         const r = await api.uploadScenarioArchive(name, file);
         setUploadResult(r.validation);
-        notify(r.installed ? "シナリオセットを登録しました。" : "シナリオデータにエラーがあるため登録しませんでした。", r.installed ? "info" : "error");
+        notify(
+          r.installed ? "シナリオセットを登録しました。" : "シナリオデータにエラーがあるため登録しませんでした。",
+          r.installed ? "info" : "error",
+        );
       } else {
         const target = current?.name ?? "_default_";
         if (!confirm(`シナリオセット「${scenarioLabel(target)}」の ${file.name} を置き換えます。`)) return;
@@ -135,7 +146,11 @@ export function ScenarioBar({ onActivated }: { onActivated: () => void }) {
         シナリオセット:{" "}
         <select value={selected} onChange={(e) => setSelected(e.target.value)}>
           {list.map((s) => (
-            <option key={s.name} value={s.name} title={s.validation.some((v) => !v.valid) ? "エラーあり" : s.setting?.description}>
+            <option
+              key={s.name}
+              value={s.name}
+              title={s.validation.some((v) => !v.valid) ? "エラーあり" : s.setting?.description}
+            >
               {scenarioLabel(s.name)}
               {s.active ? "（有効）" : ""}
               {s.validation.some((v) => !v.valid) ? "（エラー）" : ""}
@@ -143,13 +158,28 @@ export function ScenarioBar({ onActivated }: { onActivated: () => void }) {
           ))}
         </select>
       </label>
-      <button type="button" className="icon-button" title="選択したシナリオセットの詳細を表示します。" onClick={() => current && setDetail(current)}>
+      <button
+        type="button"
+        className="icon-button"
+        title="選択したシナリオセットの詳細を表示します。"
+        onClick={() => current && setDetail(current)}
+      >
         <span className="fa fa-file-text-o" />
       </button>
-      <button type="button" className="icon-button" title="選択したシナリオセットを有効化します。" onClick={() => void activate()}>
+      <button
+        type="button"
+        className="icon-button"
+        title="選択したシナリオセットを有効化します。"
+        onClick={() => void activate()}
+      >
         <span className="fa fa-check-square-o" />
       </button>
-      <button type="button" className="icon-button" title="シナリオセットの一覧を更新します。" onClick={() => void reload()}>
+      <button
+        type="button"
+        className="icon-button"
+        title="シナリオセットの一覧を更新します。"
+        onClick={() => void reload()}
+      >
         <span className="fa fa-refresh" />
       </button>
       <button
@@ -160,7 +190,12 @@ export function ScenarioBar({ onActivated }: { onActivated: () => void }) {
       >
         <span className="fa fa-download" />
       </button>
-      <button type="button" className="icon-button" title="シナリオセット(.zip)またはシナリオデータ(.json)をアップロードします。" onClick={() => fileRef.current?.click()}>
+      <button
+        type="button"
+        className="icon-button"
+        title="シナリオセット(.zip)またはシナリオデータ(.json)をアップロードします。"
+        onClick={() => fileRef.current?.click()}
+      >
         <span className="fa fa-upload" />
       </button>
       <input

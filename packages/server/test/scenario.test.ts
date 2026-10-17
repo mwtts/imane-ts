@@ -2,9 +2,9 @@ import { afterAll, describe, expect, test } from "bun:test";
 import { cpSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import type { NotificationMessage } from "@imane/shared";
 import { zipSync } from "fflate";
 import iconv from "iconv-lite";
-import type { NotificationMessage } from "@imane/shared";
 import { WorkflowManager } from "../src/engine/manager";
 import { ScenarioStore } from "../src/scenario/store";
 import { decodeText, parseLenientJson } from "../src/scenario/text";
@@ -40,7 +40,11 @@ describe("同梱のサンプルシナリオ", () => {
   });
 
   test("検証結果がすべて正常", () => {
-    expect(store().validate("_default_").every((v) => v.valid)).toBe(true);
+    expect(
+      store()
+        .validate("_default_")
+        .every((v) => v.valid),
+    ).toBe(true);
   });
 
   test("フェーズ1を開始すると、トリガーと自動アクションの連鎖で演習が進む", () => {
@@ -58,7 +62,12 @@ describe("同梱のサンプルシナリオ", () => {
     expect(names).toContain("通知"); // 演習開始トリガー
     expect(published.some((m) => m.message === "演習を開始します。")).toBe(true);
     expect(published.some((m) => m.action.id === "A00004")).toBe(true); // サイバー攻撃１ (10010001 で起動)
-    const states = new Set(inst.systemStates().filter((s) => s.when !== undefined).map((s) => s.id));
+    const states = new Set(
+      inst
+        .systemStates()
+        .filter((s) => s.when !== undefined)
+        .map((s) => s.id),
+    );
     expect(states.has("10010001")).toBe(true);
     expect(states.has("10020004")).toBe(true);
   });
@@ -96,9 +105,9 @@ describe("シナリオセットの登録", () => {
   test("読み込めない内容のファイルは保存せず、現在のシナリオは使い続けられる", () => {
     const s = store();
     const before = readFileSync(join(s.dirOf("_default_"), "actions.json"));
-    expect(() => s.putFile("_default_", "actions.json", new TextEncoder().encode('{"actions":[{"name":"x"}]}'))).toThrow(
-      "保存しませんでした",
-    );
+    expect(() =>
+      s.putFile("_default_", "actions.json", new TextEncoder().encode('{"actions":[{"name":"x"}]}')),
+    ).toThrow("保存しませんでした");
     expect(readFileSync(join(s.dirOf("_default_"), "actions.json"))).toEqual(before);
     expect(() => s.current()).not.toThrow();
   });

@@ -1,4 +1,4 @@
-import { ROLE_EVERYONE, ROLE_SYSTEM, ROLE_TEAM, type PublicMember } from "./types";
+import { type PublicMember, ROLE_EVERYONE, ROLE_SYSTEM, ROLE_TEAM } from "./types";
 
 const ALWAYS_SYSTEM = [true, true, true, true];
 

@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
 import type { LoginOptions, ProductInfo } from "@imane/shared";
+import { useEffect, useMemo, useState } from "react";
 import { api, connectEvents, hasToken } from "./api";
 import { AppProvider, errorText, useApp } from "./context";
 import { pushBus } from "./push";
@@ -64,7 +64,14 @@ function LoginPanel({ options }: { options: LoginOptions | null }) {
         </select>
       </label>
       {manual ? (
-        <input type="text" value={userid} onChange={(e) => setUserid(e.target.value)} placeholder="ユーザID" aria-label="ユーザID" size={28} />
+        <input
+          type="text"
+          value={userid}
+          onChange={(e) => setUserid(e.target.value)}
+          placeholder="ユーザID"
+          aria-label="ユーザID"
+          size={28}
+        />
       ) : (
         <label>
           役割:{" "}
@@ -78,10 +85,22 @@ function LoginPanel({ options }: { options: LoginOptions | null }) {
           </select>
         </label>
       )}
-      <button type="button" className="icon-button" title="ユーザIDの直接入力を切り替えます。" onClick={() => setManual((v) => !v)}>
+      <button
+        type="button"
+        className="icon-button"
+        title="ユーザIDの直接入力を切り替えます。"
+        onClick={() => setManual((v) => !v)}
+      >
         <span className="fa fa-pencil-square-o" />
       </button>
-      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="パスワード(設定時のみ)" aria-label="パスワード" size={18} />
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="パスワード(設定時のみ)"
+        aria-label="パスワード"
+        size={18}
+      />
       <button type="submit" className="primary" disabled={busy}>
         <span className="fa fa-sign-in" /> ログイン
       </button>
@@ -103,7 +122,9 @@ function Shell() {
   }, [notify, setSession]);
 
   useEffect(() => {
-    document.title = [product.CAPTION || "IMANE", session ? `${session.rolename}(${session.userid})` : ""].filter(Boolean).join(" -- ");
+    document.title = [product.CAPTION || "IMANE", session ? `${session.rolename}(${session.userid})` : ""]
+      .filter(Boolean)
+      .join(" -- ");
   }, [product, session]);
 
   // ログインしたら定義を読み込み、プッシュ通知に接続する。切断されたら再接続する
@@ -148,7 +169,9 @@ function Shell() {
   const nav: Array<[View, string, string]> = [
     ["console", "演習コンソール", "fa-comments"],
     ["review", "振り返り", "fa-line-chart"],
-    ...(session?.isadmin ? ([["facilitator", "ファシリテータ用コンソール", "fa-sliders"]] as Array<[View, string, string]>) : []),
+    ...(session?.isadmin
+      ? ([["facilitator", "ファシリテータ用コンソール", "fa-sliders"]] as Array<[View, string, string]>)
+      : []),
   ];
 
   return (
@@ -160,7 +183,10 @@ function Shell() {
         <h1>{product.CAPTION || "IMANE"}</h1>
         {session ? (
           <div className="login-info">
-            <span className={`fa ${connected ? "fa-plug online" : "fa-chain-broken offline"}`} title={connected ? "接続中" : "未接続"} />
+            <span
+              className={`fa ${connected ? "fa-plug online" : "fa-chain-broken offline"}`}
+              title={connected ? "接続中" : "未接続"}
+            />
             <strong>{session.rolename}</strong> <span className="muted">({session.userid})</span>
             <button type="button" onClick={() => void logout()}>
               <span className="fa fa-sign-out" /> ログアウト

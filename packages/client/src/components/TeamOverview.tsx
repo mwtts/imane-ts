@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import type {
   AvailableCard,
   MemberWithPresence,
@@ -8,6 +7,7 @@ import type {
   StateData,
   WorkflowSummary,
 } from "@imane/shared";
+import type { ReactNode } from "react";
 import { formatDate } from "../format";
 import { ConditionChips, Empty, StateChip, StateChips } from "./ui";
 
@@ -22,8 +22,7 @@ function Section({ title, count, children }: { title: string; count: number; chi
   );
 }
 
-const systemPhases = (m: MemberWithPresence) =>
-  (m.system ?? []).map((v, i) => (v ? i + 1 : 0)).filter((p) => p > 0);
+const systemPhases = (m: MemberWithPresence) => (m.system ?? []).map((v, i) => (v ? i + 1 : 0)).filter((p) => p > 0);
 
 export interface TeamOverviewProps {
   workflow: WorkflowSummary;
@@ -57,11 +56,22 @@ export function TeamOverview(p: TeamOverviewProps) {
               return (
                 <tr key={m.email} className={system ? "member-system" : ""}>
                   <td className="nowrap">
-                    <span className={`fa ${m.online ? "fa-wifi online" : "fa-times-circle offline"}`} title={m.online ? "オンライン" : "オフライン"} />{" "}
-                    <span className={`fa ${system ? "fa-user-o" : "fa-user"}`} title={system ? "自動応答ユーザ" : "参加者"} />
+                    <span
+                      className={`fa ${m.online ? "fa-wifi online" : "fa-times-circle offline"}`}
+                      title={m.online ? "オンライン" : "オフライン"}
+                    />{" "}
+                    <span
+                      className={`fa ${system ? "fa-user-o" : "fa-user"}`}
+                      title={system ? "自動応答ユーザ" : "参加者"}
+                    />
                   </td>
                   <td>
-                    <button type="button" className="link" title="このロールに通知を送ります。" onClick={() => p.onInject(m.role)}>
+                    <button
+                      type="button"
+                      className="link"
+                      title="このロールに通知を送ります。"
+                      onClick={() => p.onInject(m.role)}
+                    >
                       {m.icon && <span className={`fa ${m.icon}`} />} {m.rolename}({m.role})
                     </button>
                   </td>
@@ -288,7 +298,9 @@ export function TriggerTable({ triggers, start }: { triggers: ReplyData[]; start
               <td className="nowrap">{t.fireWhen ? formatDate(t.fireWhen) : "未発火"}</td>
               <td>
                 {t.elapsed}
-                {start && (t.elapsed ?? -1) >= 0 && <span className="muted"> (予定:{formatDate(start + (t.elapsed ?? 0) * 1000)})</span>}
+                {start && (t.elapsed ?? -1) >= 0 && (
+                  <span className="muted"> (予定:{formatDate(start + (t.elapsed ?? 0) * 1000)})</span>
+                )}
               </td>
               <td>{t.state && <StateChip id={t.state} />}</td>
               <td>

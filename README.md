@@ -56,6 +56,14 @@ bun run hash-password 'your-password'   # => {SHA256}....
 ```sh
 bun run test        # サーバ(エンジン・シナリオ・API)とクライアント(シーケンス図生成)
 bun run typecheck
+bun run lint        # Biome(lint・フォーマット・import 整列)。自動修正は bun run lint:fix
+```
+
+## Storybook
+
+```sh
+bun run storybook         # http://localhost:6006/ で起動
+bun run build-storybook   # 静的ビルド (packages/client/storybook-static)
 ```
 
 ## Java 版からの主な変更点

@@ -2,7 +2,9 @@
   "name": "imane-ts",
   "private": true,
   "version": "2.0.0",
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "dev:server": "cd packages/server && bun run dev",
     "dev:client": "cd packages/client && bun run dev",
@@ -10,9 +12,14 @@
     "start": "cd packages/server && bun run start",
     "test": "cd packages/server && bun test && cd ../client && bun test src",
     "hash-password": "cd packages/server && bun src/hash-password.ts",
-    "typecheck": "tsc -p packages/shared && tsc -p packages/server && tsc -p packages/client"
+    "typecheck": "tsc -p packages/shared && tsc -p packages/server && tsc -p packages/client",
+    "lint": "biome ci .",
+    "lint:fix": "biome check --write .",
+    "storybook": "cd packages/client && bun run storybook",
+    "build-storybook": "cd packages/client && bun run build-storybook"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.5.15",
     "typescript": "^7.0.2"
   }
 }

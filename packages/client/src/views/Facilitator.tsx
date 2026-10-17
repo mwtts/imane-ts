@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type {
   AvailableCard,
   MemberWithPresence,
@@ -10,6 +9,7 @@ import type {
   ReplyData,
   StateData,
 } from "@imane/shared";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../api";
 import { ActionDialog } from "../components/ActionDialog";
 import { EventDialog } from "../components/EventDialog";
@@ -18,7 +18,7 @@ import { ScenarioBar } from "../components/ScenarioBar";
 import { QueueTable, TeamOverview, TriggerTable } from "../components/TeamOverview";
 import { Empty, Tabs } from "../components/ui";
 import { errorText, useApp } from "../context";
-import { formatDate, formatSeconds, scenarioLabel, STATE_LABELS, workflowStatusLine } from "../format";
+import { formatDate, formatSeconds, STATE_LABELS, scenarioLabel, workflowStatusLine } from "../format";
 import { useInterval, usePush } from "../push";
 
 interface TeamDetail {
@@ -51,7 +51,12 @@ function PhasePicker(props: { phases: PhaseData[]; value?: number; onChange: (p:
     <span className="phase-picker" role="radiogroup" aria-label="フェーズ">
       {props.phases.map((p) => (
         <label key={p.phase} title={p.description}>
-          <input type="radio" name={props.name} checked={props.value === p.phase} onChange={() => props.onChange(p.phase)} />
+          <input
+            type="radio"
+            name={props.name}
+            checked={props.value === p.phase}
+            onChange={() => props.onChange(p.phase)}
+          />
           {p.phase}
         </label>
       ))}
@@ -83,7 +88,8 @@ export function FacilitatorView() {
       setPhases(ph);
       setPhaseChoice((prev) => {
         const next = { ...prev };
-        for (const p of procs) next[p.team] ??= p.workflow.phase > 0 ? p.workflow.phase : ph.length === 1 ? ph[0]!.phase : 0;
+        for (const p of procs)
+          next[p.team] ??= p.workflow.phase > 0 ? p.workflow.phase : ph.length === 1 ? ph[0]!.phase : 0;
         next.all ??= ph.length === 1 ? ph[0]!.phase : 0;
         return next;
       });
@@ -109,6 +115,7 @@ export function FacilitatorView() {
     void refreshProcesses();
   }, [refreshProcesses]);
   // processes の更新ごとに読み直すと重いので、チームの選択時だけ読む
+  // biome-ignore lint/correctness/useExhaustiveDependencies: selected の変化時だけ読み直す
   useEffect(() => {
     void refreshDetail();
   }, [selected]);
@@ -158,7 +165,12 @@ export function FacilitatorView() {
 
   const openInjection = (to?: string) => {
     if (selected && session && session.team !== selected) {
-      if (!confirm(`ログイン中のユーザは選択されているチームに所属していません。このインジェクションは${session.team}に送信されます。\n続行しますか?`)) return;
+      if (
+        !confirm(
+          `ログイン中のユーザは選択されているチームに所属していません。このインジェクションは${session.team}に送信されます。\n続行しますか?`,
+        )
+      )
+        return;
     }
     setInject({ to });
   };
@@ -173,17 +185,40 @@ export function FacilitatorView() {
         <ScenarioBar onActivated={() => location.reload()} />
         <span className="separator" />
         <span>フェーズ:</span>
-        <PhasePicker phases={phases} name="phase-all" value={phaseChoice.all} onChange={(p) => setPhaseChoice((c) => ({ ...c, all: p }))} />
-        <button type="button" className="ok" title="すべてのチームの演習フェーズを開始します。" onClick={() => start(allTeams, phaseChoice.all)}>
+        <PhasePicker
+          phases={phases}
+          name="phase-all"
+          value={phaseChoice.all}
+          onChange={(p) => setPhaseChoice((c) => ({ ...c, all: p }))}
+        />
+        <button
+          type="button"
+          className="ok"
+          title="すべてのチームの演習フェーズを開始します。"
+          onClick={() => start(allTeams, phaseChoice.all)}
+        >
           <span className="fa fa-forward" /> すべて開始
         </button>
-        <button type="button" className="danger" title="すべてのチームの演習フェーズを中断します。" onClick={() => abort(allTeams)}>
+        <button
+          type="button"
+          className="danger"
+          title="すべてのチームの演習フェーズを中断します。"
+          onClick={() => abort(allTeams)}
+        >
           <span className="fa fa-minus-square" /> すべて中断
         </button>
-        <button type="button" title="すべてのチームの演習の状態を保存します。" onClick={() => api.saveSnapshots().catch((e) => notify(errorText(e), "error"))}>
+        <button
+          type="button"
+          title="すべてのチームの演習の状態を保存します。"
+          onClick={() => api.saveSnapshots().catch((e) => notify(errorText(e), "error"))}
+        >
           <span className="fa fa-download" /> すべて状態を保存
         </button>
-        <button type="button" title="保存したデータから演習の状態を復元します。" onClick={() => restoreRef.current?.click()}>
+        <button
+          type="button"
+          title="保存したデータから演習の状態を復元します。"
+          onClick={() => restoreRef.current?.click()}
+        >
           <span className="fa fa-upload" /> 状態を復元
         </button>
         <input
@@ -198,7 +233,8 @@ export function FacilitatorView() {
           }}
         />
         <label title="チェックすると表示内容を一定時間ごとに自動的に最新化します。">
-          <input type="checkbox" checked={autoProcesses} onChange={(e) => setAutoProcesses(e.target.checked)} /> 自動的に更新
+          <input type="checkbox" checked={autoProcesses} onChange={(e) => setAutoProcesses(e.target.checked)} />{" "}
+          自動的に更新
         </label>
         <button type="button" onClick={() => void refreshProcesses()} title="表示内容を最新の状態に更新します。">
           すぐに更新
@@ -229,12 +265,17 @@ export function FacilitatorView() {
                 return (
                   <tr
                     key={p.team}
-                    className={[selected === p.team ? "selected" : "", running ? "process-running" : "", wf.state === "Aborted" ? "process-aborted" : ""].join(" ")}
+                    className={[
+                      selected === p.team ? "selected" : "",
+                      running ? "process-running" : "",
+                      wf.state === "Aborted" ? "process-aborted" : "",
+                    ].join(" ")}
                     onClick={() => setSelected(p.team)}
                   >
                     <td>{p.pid}</td>
                     <td title={p.team}>{p.teamName}</td>
                     <td>{scenarioLabel(p.scenario)}</td>
+                    {/* biome-ignore lint/a11y/useKeyWithClickEvents: 行クリック(チーム選択)への伝播を止めるだけ */}
                     <td className="nowrap" onClick={(e) => e.stopPropagation()}>
                       <PhasePicker
                         phases={phases}
@@ -243,17 +284,32 @@ export function FacilitatorView() {
                         onChange={(ph) => setPhaseChoice((c) => ({ ...c, [p.team]: ph }))}
                       />
                       {!running && (
-                        <button type="button" className="ok small" title="選択したフェーズを開始します。" onClick={() => start([p.team], phaseChoice[p.team])}>
+                        <button
+                          type="button"
+                          className="ok small"
+                          title="選択したフェーズを開始します。"
+                          onClick={() => start([p.team], phaseChoice[p.team])}
+                        >
                           <span className="fa fa-forward" /> 開始
                         </button>
                       )}
                       {running && (
-                        <button type="button" className="danger small" title="演習フェーズを中断します。" onClick={() => abort([p.team])}>
+                        <button
+                          type="button"
+                          className="danger small"
+                          title="演習フェーズを中断します。"
+                          onClick={() => abort([p.team])}
+                        >
                           <span className="fa fa-minus-circle" /> 中断
                         </button>
                       )}
                       {(wf.state === "Suspended" || wf.state === "Aborted") && (
-                        <button type="button" className="small" title="演習フェーズを再開します。" onClick={() => resume([p.team])}>
+                        <button
+                          type="button"
+                          className="small"
+                          title="演習フェーズを再開します。"
+                          onClick={() => resume([p.team])}
+                        >
                           <span className="fa fa-play-circle" /> 再開
                         </button>
                       )}
@@ -280,13 +336,21 @@ export function FacilitatorView() {
 
       <div className="team-panel">
         <div className="toolbar">
-          <span className="status-line">{selectedProc ? workflowStatusLine(selectedProc.workflow, now) : "一覧からチームを選択してください。"}</span>
+          <span className="status-line">
+            {selectedProc ? workflowStatusLine(selectedProc.workflow, now) : "一覧からチームを選択してください。"}
+          </span>
           <span className="spacer" />
-          <button type="button" disabled={selectedProc?.workflow.state !== "Started"} title="任意のアクションを実行します。" onClick={() => openInjection()}>
+          <button
+            type="button"
+            disabled={selectedProc?.workflow.state !== "Started"}
+            title="任意のアクションを実行します。"
+            onClick={() => openInjection()}
+          >
             <span className="fa fa-bolt" /> インジェクション
           </button>
           <label title="チェックすると一覧を一定時間ごとに自動的に更新します。">
-            <input type="checkbox" checked={autoDetail} onChange={(e) => setAutoDetail(e.target.checked)} /> 自動的に更新
+            <input type="checkbox" checked={autoDetail} onChange={(e) => setAutoDetail(e.target.checked)} />{" "}
+            自動的に更新
           </label>
           <button type="button" onClick={() => void refreshDetail()} disabled={!selected}>
             すぐに更新
@@ -298,7 +362,9 @@ export function FacilitatorView() {
               {
                 id: "overview",
                 label: "演習シナリオ概要",
-                content: () => <TeamOverview workflow={selectedProc.workflow} {...detail} onInject={(role) => openInjection(role)} />,
+                content: () => (
+                  <TeamOverview workflow={selectedProc.workflow} {...detail} onInject={(role) => openInjection(role)} />
+                ),
               },
               {
                 id: "history",
@@ -313,8 +379,16 @@ export function FacilitatorView() {
                   />
                 ),
               },
-              { id: "queue", label: `キュー (${detail.queue.length})`, content: () => <QueueTable queue={detail.queue} /> },
-              { id: "trigger", label: "トリガ", content: () => <TriggerTable triggers={detail.triggers} start={selectedProc.workflow.start} /> },
+              {
+                id: "queue",
+                label: `キュー (${detail.queue.length})`,
+                content: () => <QueueTable queue={detail.queue} />,
+              },
+              {
+                id: "trigger",
+                label: "トリガ",
+                content: () => <TriggerTable triggers={detail.triggers} start={selectedProc.workflow.start} />,
+              },
             ]}
           />
         ) : (
@@ -323,7 +397,11 @@ export function FacilitatorView() {
       </div>
 
       {openEvent && (
-        <EventDialog event={openEvent} points={selectedProc?.workflow.pointchest[openEvent.id]} onClose={() => setOpenId(undefined)} />
+        <EventDialog
+          event={openEvent}
+          points={selectedProc?.workflow.pointchest[openEvent.id]}
+          onClose={() => setOpenId(undefined)}
+        />
       )}
       {inject && detail && selectedProc && (
         <ActionDialog

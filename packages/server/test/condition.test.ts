@@ -1,5 +1,10 @@
 import { describe, expect, test } from "bun:test";
-import { collectConditionStates, ConditionSyntaxError, evaluateCondition, parseConditionExpression } from "@imane/shared";
+import {
+  ConditionSyntaxError,
+  collectConditionStates,
+  evaluateCondition,
+  parseConditionExpression,
+} from "@imane/shared";
 
 const holding = (...ids: string[]) => {
   const set = new Set(ids);

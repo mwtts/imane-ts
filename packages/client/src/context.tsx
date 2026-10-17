@@ -1,5 +1,5 @@
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 import type { SessionData, StateData } from "@imane/shared";
+import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from "react";
 
 export type ToastLevel = "info" | "warn" | "error";
 export interface Toast {

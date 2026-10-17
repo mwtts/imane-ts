@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import type { HelpInfo } from "@imane/shared";
+import { useEffect, useState } from "react";
 import { api } from "../api";
 import { errorText, useApp } from "../context";
 import { Modal, Tabs } from "./ui";
