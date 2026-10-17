@@ -1,0 +1,74 @@
+{
+  "contacts":[
+     {
+       "name":"サイバー攻撃者",
+       "role":"サイバー攻撃者",
+       "rolename":"サイバー攻撃者",
+       "email":"サイバー攻撃者@SampleCompany.com",
+       "team":"SampleCompany.com",
+       "desc":"",
+       "recipients":["IT課長","OT課長","CSIRT","OT担当","IT担当"],
+       "system": [true]
+     },
+     {
+       "name":"IT課長",
+       "role":"IT課長",
+       "rolename":"IT課長",
+       "email":"IT課長@SampleCompany.com",
+       "team":"SampleCompany.com",
+       "desc":"",
+       "recipients":["OT課長","CSIRT","IT担当"],
+       "system": [false]
+     },
+     {
+       "name":"OT課長",
+       "role":"OT課長",
+       "rolename":"OT課長",
+       "email":"OT課長@SampleCompany.com",
+       "team":"SampleCompany.com",
+       "desc":"",
+       "recipients":["IT課長","OT担当"],
+       "system": [false]
+     },
+     {
+       "name":"CSIRT",
+       "role":"CSIRT",
+       "rolename":"CSIRT",
+       "email":"CSIRT@SampleCompany.com",
+       "team":"SampleCompany.com",
+       "desc":"",
+       "recipients":["IT課長","OT課長","CSIRT","OT担当","IT担当"],
+       "system": [true]
+     },
+     {
+       "name":"OT担当",
+       "role":"OT担当",
+       "rolename":"OT担当",
+       "email":"OT担当@SampleCompany.com",
+       "team":"SampleCompany.com",
+       "desc":"",
+       "recipients":["IT課長","OT課長","CSIRT","OT担当","IT担当"],
+       "system": [true]
+     },
+     {
+       "name":"IT担当",
+       "role":"IT担当",
+       "rolename":"IT担当",
+       "email":"IT担当@SampleCompany.com",
+       "team":"SampleCompany.com",
+       "desc":"",
+       "recipients":["IT課長","OT課長","CSIRT","OT担当","IT担当"],
+       "system": [true]
+     },
+    {
+       "name":"演習ファシリテータ",
+       "role":"facilitator",
+       "rolename":"facilitator",
+       "email":"facilitator@SampleCompany.com",
+       "team":"SampleCompany.com",
+       "system": [false],
+       "recipients": ["all"],
+       "isadmin": true
+    }
+  ]
+}

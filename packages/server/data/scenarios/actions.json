@@ -1,0 +1,244 @@
+{
+  "actions":[
+    {
+       "type":"auto",
+       "name":"演習終了２",
+       "message":"演習終了です。",
+       "systemstatecondition": ["10020005"],
+       "delay": 20,
+       "from":"system",
+       "to":"all",
+       "attachments": ["20010002"],
+       "id":"A00002"
+    },
+    {
+       "type":"auto",
+       "name":"演習終了１",
+       "message":"演習終了です。",
+       "systemstatecondition": ["AND(NOT(10020005),10030009,10040011,10020006)"],
+       "delay": 20,
+       "from":"system",
+       "to":"all",
+       "attachments": ["20010003"],
+       "id":"A00003"
+    },
+    {
+       "type":"auto",
+       "name":"サイバー攻撃１",
+       "message":"ベンダーの保守PCから侵入しコントローラーへの攻撃",
+       "systemstatecondition": ["10010001"],
+       "delay": 3,
+       "from":"サイバー攻撃者",
+       "to":"system",
+       "attachments": ["20020004"],
+       "id":"A00004"
+    },
+    {
+       "type":"auto",
+       "name":"サイバー攻撃２",
+       "message":"制御機器に深刻なダメージを与える攻撃を実施。",
+       "systemstatecondition": ["AND(10020006,NAND(10030009,10040011))"],
+       "delay": 0,
+       "from":"サイバー攻撃者",
+       "to":"system",
+       "attachments": ["20020005"],
+       "id":"A00005"
+    },
+    {
+       "type":"auto",
+       "name":"攻撃試行",
+       "message":"サイバー攻撃者がもう一度ネットワークにアクセスを試みました。",
+       "systemstatecondition": ["10020004"],
+       "delay": 180,
+       "from":"サイバー攻撃者",
+       "to":"system",
+       "attachments": ["20020006"],
+       "id":"A00006"
+    },
+    {
+       "type":"action",
+       "name":"検知した通信データを提出",
+       "message":"不審な通信がありました。",
+       "attachments": ["20030007"],
+       "roles": ["IT課長"],
+       "statecondition": ["20070021"],
+       "id":"A00007"
+    },
+    {
+       "type":"action",
+       "name":"通信遮断のための連絡",
+       "message":"サイバー攻撃の可能性から、通信遮断を行うので準備をお願いします。",
+       "attachments": ["20030008"],
+       "roles": ["IT課長"],
+       "statecondition": ["20050015"],
+       "id":"A00008"
+    },
+    {
+       "type":"action",
+       "name":"遮断指示",
+       "message":"通信遮断を実施してください。",
+       "attachments": ["20030009"],
+       "roles": ["IT課長"],
+       "statecondition": ["20040013"],
+       "id":"A00009"
+    },
+    {
+       "type":"action",
+       "name":"コントローラのリスタート指示",
+       "message":"コントローラのリスタートをしてください。",
+       "attachments": ["20040010"],
+       "roles": ["OT課長"],
+       "statecondition": ["20060016"],
+       "id":"A00010"
+    },
+    {
+       "type":"action",
+       "name":"サイバー攻撃の可能性があるため制御機器を停止",
+       "message":"サイバー攻撃の可能性があるため制御機器を停止してください。",
+       "attachments": ["20040011"],
+       "roles": ["OT課長"],
+       "statecondition": ["20030008"],
+       "id":"A00011"
+    },
+    {
+       "type":"action",
+       "name":"コントローラの調査依頼",
+       "message":"コントローラーの調査をお願いします。",
+       "attachments": ["20040012"],
+       "roles": ["OT課長"],
+       "statecondition": ["20060016"],
+       "id":"A00012"
+    },
+    {
+       "type":"action",
+       "name":"通信遮断準備、完了報告",
+       "message":"通信遮断の準備、完了しました。",
+       "attachments": ["20040013"],
+       "roles": ["OT課長"],
+       "statecondition": ["20060018"],
+       "id":"A00013"
+    },
+    {
+       "type":"action",
+       "name":"通信遮断準備の連絡",
+       "message":"サイバー攻撃の可能性から、通信遮断を行うので準備をお願いします。",
+       "attachments": ["20040014"],
+       "roles": ["OT課長"],
+       "statecondition": ["20030008"],
+       "id":"A00014"
+    },
+    {
+       "type":"auto",
+       "name":"外部通信遮断指示",
+       "message":"サイバー攻撃の可能性があるため、外部との通信遮断を行ってください。",
+       "systemstatecondition": ["10030007"],
+       "delay": 3,
+       "from":"CSIRT",
+       "to":"IT課長",
+       "attachments": ["20050015"],
+       "id":"A00015"
+    },
+    {
+       "type":"auto",
+       "name":"コントローラの異常な動作",
+       "message":"理由は分かりませんが、コントローラーが異常な動きしています。",
+       "systemstatecondition": ["10020004"],
+       "delay": 3,
+       "from":"OT担当",
+       "to":"OT課長",
+       "attachments": ["20060016"],
+       "id":"A00016"
+    },
+    {
+       "type":"auto",
+       "name":"コントローラの故障は確認できず",
+       "message":"コントローラの故障は確認できませんでした。",
+       "systemstatecondition": ["10040012"],
+       "delay": 5,
+       "from":"OT担当",
+       "to":"OT課長",
+       "attachments": ["20060017"],
+       "id":"A00017"
+    },
+    {
+       "type":"auto",
+       "name":"通信遮断準備、完了報告",
+       "message":"通信遮断の準備、完了しました。",
+       "systemstatecondition": ["10040014"],
+       "delay": 5,
+       "from":"OT担当",
+       "to":"OT課長",
+       "attachments": ["20060018"],
+       "id":"A00018"
+    },
+    {
+       "type":"auto",
+       "name":"制御機器の停止完了",
+       "message":"制御機器を停止しました。",
+       "systemstatecondition": ["10040011"],
+       "delay": 5,
+       "from":"OT担当",
+       "to":"OT課長",
+       "attachments": ["20060019"],
+       "id":"A00019"
+    },
+    {
+       "type":"auto",
+       "name":"コントローラのリスタートの完了",
+       "message":"コントローラのリスタートを完了しました。コントローラは正常に動作しています。",
+       "systemstatecondition": ["10040010"],
+       "delay": 5,
+       "from":"OT担当",
+       "to":"OT課長",
+       "attachments": ["20060020"],
+       "id":"A00020"
+    },
+    {
+       "type":"auto",
+       "name":"検知",
+       "message":"不審な通信を検知しました",
+       "systemstatecondition": ["10020004"],
+       "delay": 3,
+       "from":"IT担当",
+       "to":"IT課長",
+       "attachments": ["20070021"],
+       "id":"A00021"
+    },
+    {
+       "type":"auto",
+       "name":"遮断完了",
+       "message":"通信遮断、完了しました。",
+       "systemstatecondition": ["10030009"],
+       "delay": 5,
+       "from":"IT担当",
+       "to":"IT課長",
+       "attachments": ["20070022"],
+       "id":"A00022"
+    },
+    {
+       "name":"通知",
+       "type":"notification",
+       "id":"s0000",
+       "roles": ["all"],
+       "assignTo": ["all"],
+       "description":"システムからの通知メッセージです。",
+       "hidden": true
+    },
+    {
+       "name":"相談",
+       "type":"talk",
+       "id":"i0001",
+       "roles": ["all"],
+       "assignTo": ["all"],
+       "description":"任意のコミュニケーションに使用します。"
+    },
+    {
+       "name":"報告・連絡",
+       "type":"action",
+       "id":"i0009",
+       "attach": true,
+       "roles": ["all"],
+       "description":"他ロールへのインシデント情報の共有・展開"
+    }
+  ]
+}

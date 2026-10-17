@@ -1,0 +1,42 @@
+﻿{
+  "actions":[
+    {
+       "name":"通知",
+       "type":"notification",
+       "id":"s0000",
+       "roles": ["all"],
+       "assignTo": ["all"],
+       "fixed":true,
+       "description":"システムからの通知メッセージです。",
+       "hidden": true
+    },
+    {
+       "name":"相談",
+       "type":"talk",
+       "id":"i0001",
+       "roles": ["all"],
+       "assignTo": ["all"],
+       "fixed":true,
+       "description":"任意のコミュニケーションに使用します。"
+    },
+    {
+       "name":"報告・連絡",
+       "type":"action",
+       "id":"i0009",
+       "attach": true,
+       "roles": ["all"],
+       "fixed":true,
+       "description":"他ロールへのインシデント情報の共有・展開"
+    },
+    {
+       "name":"システムからの警告",
+       "type":"alert",
+       "id":"i000a",
+       "attach": true,
+      "fixed":true,
+       "hidden":true,
+       "description":"システムからの警告メッセージ"
+    },
+    
+  ]
+}

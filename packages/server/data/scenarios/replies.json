@@ -1,0 +1,214 @@
+{
+ "states":[
+  {
+   "phase":"1",
+    "reply": [
+     {
+       "actionid":"s0000",
+       "name": "演習開始",
+       "message": "演習を開始します。",
+       "addstate": ["10010001"],
+       "from":"system",
+       "to":"all",
+       "state":"20010001",
+       "elapsed": 3
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10010002"],
+       "to":"all",
+       "name":"",
+       "message":"",
+       "actionid":"A00002"
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10010003"],
+       "to":"all",
+       "name":"",
+       "message":"",
+       "actionid":"A00003"
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10020004"],
+       "to":"system",
+       "name":"",
+       "message":"",
+       "actionid":"A00004"
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10020005"],
+       "to":"system",
+       "name":"",
+       "message":"",
+       "actionid":"A00005"
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10020006"],
+       "to":"system",
+       "name":"",
+       "message":"",
+       "actionid":"A00006"
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10030007"],
+       "to":"CSIRT",
+       "name":"",
+       "message":"",
+       "actionid":"A00007"
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10030008"],
+       "to":"OT課長",
+       "name":"",
+       "message":"",
+       "actionid":"A00008"
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10030009"],
+       "to":"IT担当",
+       "name":"",
+       "message":"",
+       "actionid":"A00009"
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10040010"],
+       "to":"OT担当",
+       "name":"",
+       "message":"",
+       "actionid":"A00010"
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10040011"],
+       "to":"OT担当",
+       "name":"",
+       "message":"",
+       "actionid":"A00011"
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10040012"],
+       "to":"OT担当",
+       "name":"",
+       "message":"",
+       "actionid":"A00012"
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10040013"],
+       "to":"IT課長",
+       "name":"",
+       "message":"",
+       "actionid":"A00013"
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10040014"],
+       "to":"OT担当",
+       "name":"",
+       "message":"",
+       "actionid":"A00014"
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10050015"],
+       "to":"IT課長",
+       "name":"",
+       "message":"",
+       "actionid":"A00015"
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10060016"],
+       "to":"OT課長",
+       "name":"",
+       "message":"",
+       "actionid":"A00016"
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10060017"],
+       "to":"OT課長",
+       "name":"",
+       "message":"",
+       "actionid":"A00017"
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10060018"],
+       "to":"OT課長",
+       "name":"",
+       "message":"",
+       "actionid":"A00018"
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10060019"],
+       "to":"OT課長",
+       "name":"",
+       "message":"",
+       "actionid":"A00019"
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10060020"],
+       "to":"OT課長",
+       "name":"",
+       "message":"",
+       "actionid":"A00020"
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10070021"],
+       "to":"IT課長",
+       "name":"",
+       "message":"",
+       "actionid":"A00021"
+     },
+     {
+       "type":"hidden",
+       "addstate": ["10070022"],
+       "to":"IT課長",
+       "name":"",
+       "message":"",
+       "actionid":"A00022"
+     },
+     {
+       "actionid":"i0001",
+       "to":"all",
+       "name":"相談"
+     },
+     {
+       "actionid":"all",
+       "to": "all",
+       "name": "こちらの対応範囲外です。別のところにお問い合わせ下さい。",
+       "delay":5,
+       "abort": true,
+       "type":"notfound"
+     },
+     {
+       "actionid":"all",
+       "to": "all",
+       "name":"空の応答",
+       "type":"null",
+       "delay": 0,
+       "abort":true
+     }
+   ],
+   "message":[
+     {
+        "actionid":"8000",
+        "text":"えっ、なんですか。"
+     }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,18 @@
+﻿{
+ "states":[
+  {
+   "phase":"1",
+    "reply": [
+     {
+       "actionid":"all",
+       "to": "all",
+       "name":"空の応答",
+       "type":"null",
+       "fixed":true,
+       "delay": 0,
+       "abort":true
+     }
+   ]
+  }
+ ]
+}
