@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
 import type { ServerPush } from "@imane/shared";
+import { useEffect, useRef } from "react";
 
 type Listener = (p: ServerPush) => void;
 const listeners = new Set<Listener>();

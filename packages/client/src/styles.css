@@ -540,11 +540,14 @@ option.count-many {
   border: 1px solid var(--border);
   border-radius: var(--radius);
 }
+/* mermaid が SVG に付けるインライン style を上書きする */
+/* biome-ignore-start lint/complexity/noImportantStyles: インライン style の上書きに必要 */
 .diagram svg {
   width: 100% !important;
   max-width: none !important;
   height: auto;
 }
+/* biome-ignore-end lint/complexity/noImportantStyles: インライン style の上書きに必要 */
 
 /* ------------------------------------------------------------ toasts */
 

@@ -1,4 +1,4 @@
-import { specialMember, type PublicMember } from "@imane/shared";
+import { type PublicMember, specialMember } from "@imane/shared";
 import type { Member, Scenario } from "./loader";
 
 /** パスワードハッシュを除いたメンバ情報 */

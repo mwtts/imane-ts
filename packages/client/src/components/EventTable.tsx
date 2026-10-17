@@ -1,5 +1,5 @@
-import { useCallback, useMemo, useState } from "react";
 import type { NotificationMessage, PointCard, StateData } from "@imane/shared";
+import { useCallback, useMemo, useState } from "react";
 import { compressMessage, eventStateIds, eventTime, formatDate, isHiddenEvent, summarizeMessage } from "../format";
 import { Empty, StateChips } from "./ui";
 
@@ -159,7 +159,9 @@ export function EventTable(props: EventTableProps) {
                     <td>{m.from.rolename}</td>
                     <td>
                       {m.to.rolename}
-                      {m.cc && m.cc.length > 0 && <span className="muted">; {m.cc.map((c) => c.rolename).join("; ")}</span>}
+                      {m.cc && m.cc.length > 0 && (
+                        <span className="muted">; {m.cc.map((c) => c.rolename).join("; ")}</span>
+                      )}
                     </td>
                     <td>
                       {m.action.icon && <span className={`fa ${m.action.icon}`} />} {m.action.name}

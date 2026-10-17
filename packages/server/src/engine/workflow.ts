@@ -1,12 +1,12 @@
 import {
+  type CardData,
   evaluateCondition,
   isBroadcastRole,
   isSystemUser,
   MEMBER_SYSTEM,
   MEMBER_TEAM,
-  memberMatchesRole,
   MESSAGE_LEVEL,
-  type CardData,
+  memberMatchesRole,
   type NotificationMessage,
   type Operator,
   type PointCard,
@@ -22,7 +22,7 @@ import { badRequest, conflict } from "../errors";
 import { createLogger } from "../logger";
 import type { Scenario } from "../scenario/loader";
 import { memberByRole, teamMembers } from "../scenario/members";
-import { errorReply, findReplies, isTriggerReply, nullReply, repliesForPhase, REPLY_TYPE } from "./replies";
+import { errorReply, findReplies, isTriggerReply, nullReply, REPLY_TYPE, repliesForPhase } from "./replies";
 
 export interface Clock {
   now(): number;
@@ -298,7 +298,13 @@ export class WorkflowInstance {
    * アクション要求を受け付ける。
    * 宛先が自動応答ユーザで種類が action の場合はキューに入れ、それ以外は即時に配信する。
    */
-  requestAction(card: CardData, from: PublicMember, to: PublicMember, cc: PublicMember[], replyTo?: NotificationMessage): NotificationMessage {
+  requestAction(
+    card: CardData,
+    from: PublicMember,
+    to: PublicMember,
+    cc: PublicMember[],
+    replyTo?: NotificationMessage,
+  ): NotificationMessage {
     if (!this.isRunning()) throw badRequest("このアクションは実行できません。演習が実行されていません。");
 
     const msg = this.newMessage(card, to, from, cc, replyTo);
@@ -417,7 +423,8 @@ export class WorkflowInstance {
       msg.replyDate = now;
       this.applyStateChanges(r, msg.id);
       for (const state of card.statecards) {
-        if (!this.triggerFired(state, to.role)) this.triggerEvents.push({ state, date: now, from: from.role, to: to.role });
+        if (!this.triggerFired(state, to.role))
+          this.triggerEvents.push({ state, date: now, from: from.role, to: to.role });
       }
       this.deliver(msg);
       log.info(`${this.team}: トリガーイベントを送信しました: ${r.name ?? ""} -> ${to.role}`);
@@ -441,10 +448,18 @@ export class WorkflowInstance {
   /** キュー内のアクションに対するリプライを決める。保留する場合は undefined */
   private selectReply(entry: QueuedAction): ReplyData | undefined {
     const n = entry.message;
-    const query = { phase: this.phase, actionId: n.action.id, to: n.to, order: entry.order, attachments: n.action.attachments };
+    const query = {
+      phase: this.phase,
+      actionId: n.action.id,
+      to: n.to,
+      order: entry.order,
+      attachments: n.action.attachments,
+    };
     const candidates = findReplies(this.scenario, query);
     if (candidates.length === 0) {
-      return isSystemUser(n.to, this.phase) ? errorReply(this.scenario, this.phase) : nullReply(this.scenario, this.phase);
+      return isSystemUser(n.to, this.phase)
+        ? errorReply(this.scenario, this.phase)
+        : nullReply(this.scenario, this.phase);
     }
     const sorted = [...candidates].sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
     const found = sorted.find((r) => this.replyApplicable(r));

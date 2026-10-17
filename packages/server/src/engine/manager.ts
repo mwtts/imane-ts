@@ -2,7 +2,7 @@ import type { NotificationMessage, ProcessSummary } from "@imane/shared";
 import { badRequest, notFound } from "../errors";
 import { createLogger } from "../logger";
 import type { ScenarioStore } from "../scenario/store";
-import { WorkflowInstance, type Clock, type WorkflowSnapshot } from "./workflow";
+import { type Clock, WorkflowInstance, type WorkflowSnapshot } from "./workflow";
 
 const log = createLogger("manager");
 

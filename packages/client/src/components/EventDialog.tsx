@@ -36,7 +36,9 @@ export function EventDialog(props: {
             <th>発生日時</th>
             <td>
               {formatDate(e.sentDate)}
-              {e.replyDate && e.replyDate !== e.sentDate && <span className="muted">（応答 {formatDate(e.replyDate)}）</span>}
+              {e.replyDate && e.replyDate !== e.sentDate && (
+                <span className="muted">（応答 {formatDate(e.replyDate)}）</span>
+              )}
             </td>
           </tr>
           <tr>

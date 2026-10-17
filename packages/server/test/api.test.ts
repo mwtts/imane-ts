@@ -133,7 +133,11 @@ describe("演習の進行", () => {
   });
 
   test("所有していないステートは添付できない", async () => {
-    const r = await call("POST", "/api/actions", leader, { actionId: "i0009", to: "OT課長", attachments: ["20020005"] });
+    const r = await call("POST", "/api/actions", leader, {
+      actionId: "i0009",
+      to: "OT課長",
+      attachments: ["20020005"],
+    });
     expect(r.status).toBe(400);
     expect(r.json.message).toContain("添付できない");
   });
@@ -144,7 +148,11 @@ describe("演習の進行", () => {
   });
 
   test("連絡を送ると送信者と宛先の履歴に残る", async () => {
-    const r = await call("POST", "/api/actions", leader, { actionId: "i0001", to: "OT課長", message: "状況を共有します" });
+    const r = await call("POST", "/api/actions", leader, {
+      actionId: "i0001",
+      to: "OT課長",
+      message: "状況を共有します",
+    });
     expect(r.status).toBe(202);
     const mine = (await call("GET", `/api/teams/${TEAM}/history`, leader)).json as NotificationMessage[];
     const sent = mine.find((m) => m.id === r.json.id);

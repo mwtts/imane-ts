@@ -1,5 +1,5 @@
 import type { CardData, NotificationMessage, PointCard, ReplyData, ScenarioSetting, StateData } from "@imane/shared";
-import { WorkflowInstance, type Clock } from "../src/engine/workflow";
+import { type Clock, WorkflowInstance } from "../src/engine/workflow";
 import type { Member, Scenario } from "../src/scenario/loader";
 
 export class FakeClock implements Clock {

@@ -1,4 +1,4 @@
-import { isBroadcastRole, ROLE_SYSTEM, type NotificationMessage, type PublicMember } from "@imane/shared";
+import { isBroadcastRole, type NotificationMessage, type PublicMember, ROLE_SYSTEM } from "@imane/shared";
 import { compressMessage, eventStateIds, eventTime, formatDate, isHiddenEvent, summarizeMessage } from "./format";
 
 export interface SequenceOptions {
@@ -46,13 +46,19 @@ function eventText(m: NotificationMessage, opts: SequenceOptions): string {
   if (opts.compact) return sanitize(head);
   const states = eventStateIds(m).map((id) => `[${opts.stateName(id)}]`);
   const points = (opts.pointNames?.(m.id) ?? []).map((p) => `★${p}`);
-  const body = [compressMessage(m), m.replyTo ? `(返信元:${summarizeMessage(m.replyTo)})` : ""].filter(Boolean).join(" ");
+  const body = [compressMessage(m), m.replyTo ? `(返信元:${summarizeMessage(m.replyTo)})` : ""]
+    .filter(Boolean)
+    .join(" ");
   const tail = [...states, ...points].join(" ");
   return [sanitize(`${head} ${body}`), tail ? sanitize(tail) : ""].filter(Boolean).join("<br/>");
 }
 
 /** イベント履歴から mermaid のシーケンス図を作る */
-export function buildSequence(events: readonly NotificationMessage[], members: readonly PublicMember[], opts: SequenceOptions): string {
+export function buildSequence(
+  events: readonly NotificationMessage[],
+  members: readonly PublicMember[],
+  opts: SequenceOptions,
+): string {
   const drawable = events.filter((m) => isDrawable(m, opts));
   const active = new Set<string>();
   for (const m of drawable) {
@@ -65,11 +71,17 @@ export function buildSequence(events: readonly NotificationMessage[], members: r
     (m) => (opts.visibleRoles?.has(m.role) ?? true) && (!opts.hideInactive || active.has(m.role)),
   );
   const alias = new Map<string, string>([[ROLE_SYSTEM, "p0"]]);
-  participants.forEach((m, i) => alias.set(m.role, `p${i + 1}`));
+  participants.forEach((m, i) => {
+    alias.set(m.role, `p${i + 1}`);
+  });
   const first = "p0";
   const last = participants.length > 0 ? `p${participants.length}` : "p0";
 
-  const lines = ["sequenceDiagram", "participant p0 as システム", ...participants.map((m, i) => `participant p${i + 1} as ${sanitize(m.rolename)}`)];
+  const lines = [
+    "sequenceDiagram",
+    "participant p0 as システム",
+    ...participants.map((m, i) => `participant p${i + 1} as ${sanitize(m.rolename)}`),
+  ];
   for (const m of drawable) {
     const from = alias.get(m.from.role);
     const text = eventText(m, opts);

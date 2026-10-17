@@ -1,5 +1,11 @@
+import {
+  type AvailableCard,
+  isSystemUser,
+  type MemberWithPresence,
+  type NotificationMessage,
+  ROLE_TEAM,
+} from "@imane/shared";
 import { useMemo, useState } from "react";
-import { isSystemUser, ROLE_TEAM, type AvailableCard, type MemberWithPresence, type NotificationMessage } from "@imane/shared";
 import { api } from "../api";
 import { errorText, useApp } from "../context";
 import { compressMessage, formatDate, quoteForReply } from "../format";
@@ -82,7 +88,8 @@ export function ActionDialog(props: ActionDialogProps) {
     const e: Record<string, string> = {};
     if (!card) e.action = "アクションを選択してください。";
     if (!to) e.to = "[To]を選択してください。";
-    if (card?.type === "talk" && message.trim() === "") e.message = "「話し合い」を行うには、メッセージを入力してください。";
+    if (card?.type === "talk" && message.trim() === "")
+      e.message = "「話し合い」を行うには、メッセージを入力してください。";
     if ((card?.type === "share" || card?.id === "i0009") && attachments.length === 0) {
       e.state = "「インシデント情報共有」を行うには、共有したいインシデント情報を選択してください。";
     }
@@ -196,7 +203,8 @@ export function ActionDialog(props: ActionDialogProps) {
                 <option value="">なし</option>
                 {props.events.map((ev) => (
                   <option key={ev.id} value={ev.id}>
-                    {formatDate(ev.sentDate)}: {ev.from.rolename} &gt; {ev.to.rolename} [{ev.action.name}] {compressMessage(ev)}
+                    {formatDate(ev.sentDate)}: {ev.from.rolename} &gt; {ev.to.rolename} [{ev.action.name}]{" "}
+                    {compressMessage(ev)}
                   </option>
                 ))}
               </select>
@@ -226,7 +234,12 @@ export function ActionDialog(props: ActionDialogProps) {
           <tr>
             <th title="任意のメッセージを追加します。">メッセージ</th>
             <td>
-              <textarea rows={8} value={message} onChange={(e) => setMessage(e.target.value)} aria-invalid={!!errors.message} />
+              <textarea
+                rows={8}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                aria-invalid={!!errors.message}
+              />
               {errors.message && <div className="input-error">{errors.message}</div>}
             </td>
           </tr>

@@ -56,7 +56,12 @@ export function nullReply(scenario: Scenario, phase: number): ReplyData {
  * 宛先(to)・送信元(from)がリプライの条件に合うか。
  * 宛先は自動応答ユーザでなければならない。
  */
-export function checkRecipients(r: ReplyData, to: PublicMember | undefined, from: PublicMember | undefined, phase: number): boolean {
+export function checkRecipients(
+  r: ReplyData,
+  to: PublicMember | undefined,
+  from: PublicMember | undefined,
+  phase: number,
+): boolean {
   if (to && !isSystemUser(to, phase)) return false;
   if (to && !memberMatchesRole(to, r.to)) return false;
   if (from && !memberMatchesRole(from, r.from)) return false;

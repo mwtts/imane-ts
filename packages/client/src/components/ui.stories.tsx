@@ -1,12 +1,18 @@
-import { useEffect, type ReactNode } from "react";
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { StateData } from "@imane/shared";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { type ReactNode, useEffect } from "react";
 import { useApp } from "../context";
 import { ConditionChips, Empty, StateChip, StateChips, Tabs } from "./ui";
 
 const SAMPLE_STATES: StateData[] = [
   { id: "S001", name: "Web サーバ停止", description: "公開 Web サーバが応答しない", icon: "fa-server" },
-  { id: "S002", name: "マルウェア検知", description: "EDR がアラートを上げた", icon: "fa-bug", effect: "html:<p>検知!</p>" },
+  {
+    id: "S002",
+    name: "マルウェア検知",
+    description: "EDR がアラートを上げた",
+    icon: "fa-bug",
+    effect: "html:<p>検知!</p>",
+  },
   { id: "P001", name: "初動フェーズ開始", type: 1 },
 ];
 
@@ -14,7 +20,7 @@ const SAMPLE_STATES: StateData[] = [
 function WithStates({ children }: { children: ReactNode }) {
   const { states, setStates } = useApp();
   useEffect(() => setStates(SAMPLE_STATES), [setStates]);
-  return states.length > 0 ? <>{children}</> : null;
+  return states.length > 0 ? children : null;
 }
 
 const meta = {
