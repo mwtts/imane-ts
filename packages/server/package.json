@@ -13,12 +13,12 @@
     "@hono/bun": "^1.0.1",
     "@imane/shared": "workspace:*",
     "fflate": "^0.8.3",
-    "hono": "^4.13.13",
+    "hono": "^4.13.14",
     "iconv-lite": "^0.7.3",
     "json5": "^2.2.3"
   },
   "devDependencies": {
-    "@types/bun": "^1.4.3",
+    "@types/bun": "^1.4.4",
     "typescript": "^7.0.2"
   }
 }
